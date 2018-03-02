@@ -47,11 +47,9 @@ void ATank::AimAt(FVector HitLocation) {
 
 void ATank::Fire() {
 	auto Time = GetWorld()->GetTimeSeconds();
-
 	bool isReloaded = (Time - LastFireTime) > ReloadTimeInSeconds;
 
 	if (Barrel && isReloaded) {
-		UE_LOG(LogTemp, Warning, TEXT("%f: Tank Fires"), Time);
 		// Spawn projectile at socket location
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
