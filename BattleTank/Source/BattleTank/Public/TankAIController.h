@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Josh "Asheron" Deal 2018
 
 #pragma once
 
@@ -21,4 +21,6 @@ private:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+	float AcceptanceRadius = 3000; // How close the AI tank gets to the Player in cm?
 };
