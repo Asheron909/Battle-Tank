@@ -1,3 +1,4 @@
+
 // Copyright Josh "Asheron" Deal 2018
 
 #include "BattleTank.h"
@@ -26,5 +27,7 @@ void ATankAIController::Tick( float DeltaTime ) {
 	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
-	AimingComponent->Fire(); // Limit fire rate
+	if (AimingComponent->GetFiringState() == EFiringState::Locked) {
+		AimingComponent->Fire(); // Limit fire rate
+	}
 }

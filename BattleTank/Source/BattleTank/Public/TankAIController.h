@@ -16,10 +16,12 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:
 	// void ATank::AimAt(FVector HitLocation);
 
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float AcceptanceRadius = 8000; // How close the AI tank gets to the Player in cm
+
 private:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
-
-	float AcceptanceRadius = 3000; // How close the AI tank gets to the Player in cm?
 };
