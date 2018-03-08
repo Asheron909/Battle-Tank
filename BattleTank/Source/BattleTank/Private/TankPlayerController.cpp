@@ -1,6 +1,7 @@
 // Copyright Josh "Asheron" Deal 2018
 
 #include "BattleTank.h"
+#include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
@@ -18,6 +19,19 @@ void ATankPlayerController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 	AimTowardsCrosshair();
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn) {
+
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		// Subscribe our local method to the tank's death event
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossesdTankDeath);
+	}
 }
 
 void ATankPlayerController::AimTowardsCrosshair() {
@@ -69,11 +83,16 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility)) {
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Camera)) {
 		// Set hit location
 		HitLocation = HitResult.Location;
 		return true;
 	}
 	HitLocation = FVector(0);
 	return false; // Line trace didn't succeed
+}
+
+void ATankPlayerController::OnPossesdTankDeath() {
+
+	StartSpectatingOnly();
 }
